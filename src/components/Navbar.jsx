@@ -13,21 +13,34 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  const handleNavClick = () => setMobileOpen(false);
+  useEffect(() => {
+    const onHashChange = () => setMobileOpen(false);
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  const toggleMenu = () => setMobileOpen((prev) => !prev);
+  const closeMenu = () => setMobileOpen(false);
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-warm-50/90 backdrop-blur-md shadow-sm"
-          : "bg-transparent"
+        mobileOpen
+          ? "bg-warm-50"
+          : scrolled
+            ? "bg-warm-50/90 backdrop-blur-md shadow-sm"
+            : "bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <nav className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a
           href="#"
           className="font-serif text-xl font-semibold tracking-tight text-warm-900"
@@ -36,7 +49,6 @@ export default function Navbar() {
           <span className="text-primary-600">.</span>
         </a>
 
-        {/* Desktop nav */}
         <ul className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <li key={link.href}>
@@ -50,10 +62,9 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Mobile toggle */}
         <button
-          onClick={() => setMobileOpen((prev) => !prev)}
-          className="relative z-50 md:hidden"
+          onClick={toggleMenu}
+          className="relative z-20 md:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
           {mobileOpen ? (
@@ -62,23 +73,24 @@ export default function Navbar() {
             <HiMenuAlt3 className="h-6 w-6 text-warm-900" />
           )}
         </button>
-
-        {/* Mobile nav overlay */}
-        {mobileOpen && (
-          <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-warm-50/98 backdrop-blur-lg md:hidden">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={handleNavClick}
-                className="font-serif text-2xl font-medium text-warm-900 transition-colors hover:text-primary-600"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        )}
       </nav>
+
+      {mobileOpen && (
+        <div
+          onClick={closeMenu}
+          className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-8 bg-warm-50 md:hidden"
+        >
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="font-serif text-2xl font-medium text-warm-900 transition-colors hover:text-primary-600"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
     </header>
   );
 }
