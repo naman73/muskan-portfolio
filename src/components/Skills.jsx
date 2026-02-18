@@ -3,17 +3,17 @@ import ScrollReveal from "./ScrollReveal";
 import { skills } from "../data/content";
 
 const categoryLabels = {
-  core: "Strategic & Brand",
-  creative: "Digital & Content",
-  strategy: "Client & Leadership",
-  technical: "Tools & Platforms",
+  brand: "Brand & Campaign",
+  digital: "Digital & Content",
+  execution: "Campaign & Execution",
+  tools: "Tools & Platforms",
 };
 
 const categoryColors = {
-  core: "bg-primary-50 text-primary-700 border-primary-200",
-  creative: "bg-amber-50 text-amber-700 border-amber-200",
-  strategy: "bg-sky-50 text-sky-700 border-sky-200",
-  technical: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  brand: "bg-primary-50 text-primary-700 border-primary-200",
+  digital: "bg-amber-50 text-amber-700 border-amber-200",
+  execution: "bg-sky-50 text-sky-700 border-sky-200",
+  tools: "bg-emerald-50 text-emerald-700 border-emerald-200",
 };
 
 export default function Skills() {
@@ -39,7 +39,7 @@ export default function Skills() {
         <div className="grid gap-8 sm:grid-cols-2">
           {Object.entries(grouped).map(([category, items], catIdx) => (
             <ScrollReveal key={category} delay={catIdx * 0.1}>
-              <div className="rounded-2xl bg-white p-6 shadow-sm">
+              <div className="h-full rounded-2xl bg-white p-6 shadow-sm">
                 <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-warm-500">
                   {categoryLabels[category]}
                 </h3>
